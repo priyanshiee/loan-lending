@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loan Eligibility Calculator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        #result h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #result p {
+            font-size: 16px;
+        }
+
+        .highlight {
+            background-color: #e6ffe6; /* Light Green for highlight */
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Loan Eligibility Calculator</h1>
+
+    <div class="container">
+        <label for="tenure">TENURE (MONTHS):</label>
+        <input type="number" id="tenure" min="1">
+
+        <label for="loanAmount">LOAN AMOUNT: ₹</label>
+        <input type="number" id="loanAmount" min="1">
+
+        <label for="interestRate">ANNUAL INTEREST RATE:</label>
+        <input type="number" id="interestRate" min="0" step="0.1">
+
+        <label for="monthlySalary">MONTHLY SALARY: ₹</label>
+        <input type="number" id="monthlySalary" min="0">
+
+        <label for="otherEmis">OTHER EMIS: ₹</label>
+        <input type="number" id="otherEmis" min="0">
+
+        <button onclick="calculate()">Calculate</button>
+
+        <div id="result">
+            <h2>The output as per the calculator is displayed below</h2>
+            <p>ARE YOU ELIGIBLE FOR LOAN? <span id="eligibility"></span></p>
+            <p>EMI: ₹<span id="emi"></span></p>
+            <p>LOAN AMOUNT YOU ARE ELIGIBLE FOR: ₹<span id="eligibleAmount"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            // Get input values
+            const tenure = parseInt(document.getElementById("tenure").value);
+            const loanAmount = parseInt(document.getElementById("loanAmount").value);
+            const interestRate = parseFloat(document.getElementById("interestRate").value) / 12 / 100; 
+            const monthlySalary = parseInt(document.getElementById("monthlySalary").value);
+            const otherEmis = parseInt(document.getElementById("otherEmis").value);
+
+            // Calculate EMI using formula 
+            const emi = (loanAmount * interestRate * Math.pow(1 + interestRate, tenure)) / (Math.pow(1 + interestRate, tenure) - 1);
+
+            // Calculate eligible loan amount (simplified, adjust based on your logic)
+            const eligibleLoanAmount = (monthlySalary - otherEmis) * 40; // Example: 40 times monthly disposable income
+
+            // Determine eligibility
+            const isEligible = eligibleLoanAmount >= loanAmount;
+
+            // Display results
+            document.getElementById("eligibility").textContent = isEligible ? "Yes" : "No";
+            document.getElementById("emi").textContent = emi.toFixed(2);
+            document.getElementById("eligibleAmount").textContent = eligibleLoanAmount.toFixed(2);
+
+            // Highlight eligible amount if eligible
+            if (isEligible) {
+                document.getElementById("eligibleAmount").classList.add("highlight");
+            } else {
+                document.getElementById("eligibleAmount").classList.remove("highlight");
+            }
+        }
+    </script>
+
+</body>
+</html>
