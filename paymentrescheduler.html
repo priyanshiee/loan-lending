@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Rescheduler</title>
     <style>
         body {
@@ -70,14 +68,41 @@
     </style>
 </head>
 <body>
+
     <h1>Payment Rescheduler</h1>
+
     <div class="container">
+        <div>
+            <label for="billOrganizer">Bill Organizer for:</label>
+            <input type="text" id="billOrganizer" placeholder="Enter Text Here">
+        </div>
+
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Mr. John Smith">
+        </div>
+
+        <div>
+            <label for="contactNumber">Contact Number:</label>
+            <input type="text" id="contactNumber" placeholder="(555) 555-5555">
+        </div>
+
+        <div>
+            <label for="homeOffice">Home/Office:</label>
+            <input type="text" id="homeOffice" placeholder="Home">
+        </div>
+
+        <div>
+            <label for="address">Address:</label>
+            <input type="text" id="address" placeholder="H-106 Tech Town, East Ivy">
+        </div>
+
         <table>
             <thead>
                 <tr>
                     <th>Bill Received On</th>
                     <th>Due Date</th>
-                    <th>Late Fee</th>
+                    <th>Late Fee (if any)</th>
                     <th>Bill For</th>
                     <th>Billing Month</th>
                     <th>Total Month</th>
@@ -86,7 +111,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Rows (Repeat for 6 rows) -->
                 <tr>
                     <td><input type="date" id="billReceivedOn1"></td>
                     <td><input type="date" id="dueDate1"></td>
@@ -97,58 +121,85 @@
                     <td><input type="text" id="paidBy1"></td>
                     <td><input type="date" id="paymentDate1"></td>
                 </tr>
-                <!-- Add similar rows for total of 6 -->
+                <tr>
+                    <td><input type="date" id="billReceivedOn2"></td>
+                    <td><input type="date" id="dueDate2"></td>
+                    <td><input type="text" id="lateFee2"></td>
+                    <td><input type="text" id="billFor2"></td>
+                    <td><input type="text" id="billingMonth2"></td>
+                    <td><input type="text" id="totalMonth2"></td>
+                    <td><input type="text" id="paidBy2"></td>
+                    <td><input type="date" id="paymentDate2"></td>
+                </tr>
+                <tr>
+                    <td><input type="date" id="billReceivedOn3"></td>
+                    <td><input type="date" id="dueDate3"></td>
+                    <td><input type="text" id="lateFee3"></td>
+                    <td><input type="text" id="billFor3"></td>
+                    <td><input type="text" id="billingMonth3"></td>
+                    <td><input type="text" id="totalMonth3"></td>
+                    <td><input type="text" id="paidBy3"></td>
+                    <td><input type="date" id="paymentDate3"></td>
+                </tr>
+                <tr>
+                    <td><input type="date" id="billReceivedOn4"></td>
+                    <td><input type="date" id="dueDate4"></td>
+                    <td><input type="text" id="lateFee4"></td>
+                    <td><input type="text" id="billFor4"></td>
+                    <td><input type="text" id="billingMonth4"></td>
+                    <td><input type="text" id="totalMonth4"></td>
+                    <td><input type="text" id="paidBy4"></td>
+                    <td><input type="date" id="paymentDate4"></td>
+                </tr>
+                <tr>
+                    <td><input type="date" id="billReceivedOn5"></td>
+                    <td><input type="date" id="dueDate5"></td>
+                    <td><input type="text" id="lateFee5"></td>
+                    <td><input type="text" id="billFor5"></td>
+                    <td><input type="text" id="billingMonth5"></td>
+                    <td><input type="text" id="totalMonth5"></td>
+                    <td><input type="text" id="paidBy5"></td>
+                    <td><input type="date" id="paymentDate5"></td>
+                </tr>
+                <tr>
+                    <td><input type="date" id="billReceivedOn6"></td>
+                    <td><input type="date" id="dueDate6"></td>
+                    <td><input type="text" id="lateFee6"></td>
+                    <td><input type="text" id="billFor6"></td>
+                    <td><input type="text" id="billingMonth6"></td>
+                    <td><input type="text" id="totalMonth6"></td>
+                    <td><input type="text" id="paidBy6"></td>
+                    <td><input type="date" id="paymentDate6"></td>
+                </tr>
+                <tr>
+                    <td colspan="5"></td>
+                    <td colspan="3">Total Amount Paid: <span id="totalAmountPaid"></span></td>
+                </tr>
             </tbody>
         </table>
 
         <div class="button-container">
-            <button onclick="savePayment()">Save Payments</button>
-            <button onclick="fetchPayments()">Load Payments</button>
+            <button onclick="calculateTotal()">Calculate Total</button>
         </div>
     </div>
 
     <script>
-        const apiURL = "http://localhost:5000/api/payments";
+        function calculateTotal() {
+            // Get all the total month values
+            const totalMonth1 = parseFloat(document.getElementById("totalMonth1").value) || 0;
+            const totalMonth2 = parseFloat(document.getElementById("totalMonth2").value) || 0;
+            const totalMonth3 = parseFloat(document.getElementById("totalMonth3").value) || 0;
+            const totalMonth4 = parseFloat(document.getElementById("totalMonth4").value) || 0;
+            const totalMonth5 = parseFloat(document.getElementById("totalMonth5").value) || 0;
+            const totalMonth6 = parseFloat(document.getElementById("totalMonth6").value) || 0;
 
-        async function savePayment() {
-            const rows = document.querySelectorAll("tbody tr");
-            const payments = [];
+            // Calculate the total amount paid
+            const totalAmount = totalMonth1 + totalMonth2 + totalMonth3 + totalMonth4 + totalMonth5 + totalMonth6;
 
-            rows.forEach((row, index) => {
-                const payment = {
-                    billReceivedOn: row.querySelector(`#billReceivedOn${index + 1}`).value,
-                    dueDate: row.querySelector(`#dueDate${index + 1}`).value,
-                    lateFee: parseFloat(row.querySelector(`#lateFee${index + 1}`).value) || 0,
-                    billFor: row.querySelector(`#billFor${index + 1}`).value,
-                    billingMonth: row.querySelector(`#billingMonth${index + 1}`).value,
-                    totalMonth: parseFloat(row.querySelector(`#totalMonth${index + 1}`).value) || 0,
-                    paidBy: row.querySelector(`#paidBy${index + 1}`).value,
-                    paymentDate: row.querySelector(`#paymentDate${index + 1}`).value,
-                };
-                payments.push(payment);
-            });
-
-            try {
-                const response = await fetch(apiURL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payments),
-                });
-                alert("Payments saved successfully!");
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        async function fetchPayments() {
-            const response = await fetch(apiURL);
-            const payments = await response.json();
-
-            payments.forEach((payment, index) => {
-                document.getElementById(`billReceivedOn${index + 1}`).value = payment.billReceivedOn.split("T")[0];
-                // Repeat for all fields
-            });
+            // Display the total amount paid
+            document.getElementById("totalAmountPaid").textContent = "$" + totalAmount.toFixed(2);
         }
     </script>
+
 </body>
 </html>
